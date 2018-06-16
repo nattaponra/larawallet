@@ -1,0 +1,14 @@
+{
+    "name": "nattaponra/LaraWallet",
+    "authors": [
+        {
+            "name": "Nattapon Rakthong",
+            "email": "nattapon.rakthong@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {"nattaponra\\LaraWallet\\": "src/"}
+    }
+
+}
