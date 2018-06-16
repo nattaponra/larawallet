@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace nattaponra\LaraWallet;
 
 use Illuminate\Support\ServiceProvider;
 
