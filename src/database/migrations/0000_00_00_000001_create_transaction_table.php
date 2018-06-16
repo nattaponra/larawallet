@@ -9,11 +9,12 @@ class CreateTransactionTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('PAYMENT.DATABASE.TABLE',"wallet_system_transaction"), function (Blueprint $table) {
+        Schema::create(config('larawallet.database.transaction.table',"lara_wallet_transactions"), function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->index();
+            $table->unsignedInteger('wallet_id')->index();
             $table->integer('transaction_type_id')->index();
             $table->double("amount");
+            $table->foreign('wallet_id') ->references('id')->on(config('larawallet.database.transaction.table',"lara_wallet_transactions"))->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -22,6 +23,6 @@ class CreateTransactionTable extends Migration
      */
     public function down()
     {
-        Schema::drop(config('PAYMENT.DATABASE.TABLE',"wallet_system_transaction"));
+        Schema::drop(config('larawallet.database.transaction.table',"lara_wallet_transactions"));
     }
 }
