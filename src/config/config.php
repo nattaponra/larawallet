@@ -1,5 +1,4 @@
 <?php
 return [
-
-    'test'=>'1'
+       'test'=>'1'
     ];
