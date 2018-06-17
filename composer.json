@@ -6,7 +6,7 @@
             "email": "nattapon.rakthong@gmail.com"
         }
     ],
-
+    "minimum-stability": "stable",
     "require": {},
     "require-dev": {
         "mockery/mockery": "0.9.*",
