@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
-    protected $fillable = ["wallet_id","transaction_type","amount","deposit"];
+    protected $fillable = ["wallet_id","transaction_type","amount"];
 
     public function __construct(array $attributes = [])
     {
