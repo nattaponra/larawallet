@@ -6,6 +6,10 @@ namespace nattaponra\LaraWallet;
 
 trait HasWallet
 {
+    /**
+     *
+     * @return Wallet
+     */
     public function wallet()
     {
 
@@ -21,7 +25,7 @@ trait HasWallet
     {
         $wallet->create([
             'user_id' => $this->id,
-            'balance' => config('larawallet.wallet_balance_init',0)
+            'balance' => config('larawallet.balance_init',0)
         ]);
     }
 }
