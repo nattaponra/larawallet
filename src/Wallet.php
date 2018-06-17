@@ -16,6 +16,11 @@ class Wallet extends Model
         parent::__construct($attributes);
     }
 
+    private function isEnough($amount){
+
+        return $this->balance >= $amount;
+
+    }
 
     public function balance(){
         return $this->balance;
@@ -31,6 +36,8 @@ class Wallet extends Model
             'transaction_type' => 'deposit',
             'amount'           => $amount
         ]);
+
+        return true;
     }
 
     public function received($amount){
@@ -46,29 +53,35 @@ class Wallet extends Model
 
     public function withdraw($amount){
 
-        $this->balance -= $amount;
-        $this->save();
+        if($this->isEnough($amount)){
 
-        $this->transactions()->create([
-            'wallet_id'        => $this->id,
-            'transaction_type' => 'withdraw',
-            'amount'           => $amount
-        ]);
+            $this->balance -= $amount;
+            $this->save();
+
+            $this->transactions()->create([
+                'wallet_id'        => $this->id,
+                'transaction_type' => 'withdraw',
+                'amount'           => $amount
+            ]);
+        }
+
+
     }
 
     public function transfer($amount , $toUser){
 
-        $this->balance -= $amount;
-        $this->save();
+        if($this->isEnough($amount)) {
+            $this->balance -= $amount;
+            $this->save();
 
-        $this->transactions()->create([
-            'wallet_id'        => $this->id,
-            'transaction_type' => 'transfer',
-            'amount'           => $amount
-        ]);
+            $this->transactions()->create([
+                'wallet_id' => $this->id,
+                'transaction_type' => 'transfer',
+                'amount' => $amount
+            ]);
 
-        $toUser->wallet->received($amount);
-
+            $toUser->wallet->received($amount);
+        }
     }
 
 
