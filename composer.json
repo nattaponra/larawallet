@@ -6,7 +6,12 @@
             "email": "nattapon.rakthong@gmail.com"
         }
     ],
+
     "require": {},
+    "require-dev": {
+        "mockery/mockery": "0.9.*",
+        "phpunit/phpunit": "~5.7"
+    },
     "autoload": {
         "psr-4": {"nattaponra\\LaraWallet\\": "src/"},
         "classmap":[
