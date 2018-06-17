@@ -14,7 +14,7 @@ class CreateTransactionTable extends Migration
             $table->unsignedInteger('wallet_id')->index();
             $table->string('transaction_type')->index();
             $table->double("amount");
-            $table->foreign('wallet_id') ->references('id')->on(config('larawallet.transaction_table',"lara_wallet_transactions"))->onDelete('cascade');
+            $table->foreign('wallet_id') ->references('id')->on(config('larawallet.wallet_table',"lara_wallet_wallets"))->onDelete('cascade');
             $table->timestamps();
         });
     }
