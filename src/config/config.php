@@ -30,5 +30,5 @@ return [
     |  Default 0
     |
     */
-       'wallet_balance_init'=> 100
+       'balance_init'=> 0
     ];
