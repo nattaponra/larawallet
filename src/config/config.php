@@ -30,5 +30,17 @@ return [
     |  Default 0
     |
     */
-       'balance_init'=> 0
+       'balance_init' => 0 ,
+
+
+
+       'withdraw_fee' => 0,
+
+
+
+
+       'transfer_fee' => 0,
+
+
+
     ];

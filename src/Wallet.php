@@ -23,6 +23,7 @@ class Wallet extends Model
     }
 
     public function balance(){
+
         return $this->balance;
     }
 
@@ -41,6 +42,7 @@ class Wallet extends Model
     }
 
     public function received($amount){
+        
         $this->balance += $amount;
         $this->save();
 
@@ -54,8 +56,14 @@ class Wallet extends Model
     public function withdraw($amount){
 
         if($this->isEnough($amount)){
+            $fee = 0;
+            $withdrawFee = config("larawallet.withdraw_fee",0);
 
-            $this->balance -= $amount;
+            if($withdrawFee != 0){
+                $fee = $amount * ($withdrawFee/100);
+            }
+
+            $this->balance -= $amount - $fee;
             $this->save();
 
             $this->transactions()->create([
@@ -63,6 +71,11 @@ class Wallet extends Model
                 'transaction_type' => 'withdraw',
                 'amount'           => $amount
             ]);
+
+            if($fee !=0 ){
+                $this->fee($fee,"withdraw");
+            }
+
         }
 
 
@@ -71,20 +84,40 @@ class Wallet extends Model
     public function transfer($amount , $toUser){
 
         if($this->isEnough($amount)) {
-            $this->balance -= $amount;
+            $fee = 0;
+            $transferFee = config("larawallet.transfer_fee",0);
+
+            if($transferFee != 0){
+                $fee = $amount * ($transferFee/100);
+            }
+
+            $this->balance -= $amount - $fee;
             $this->save();
 
             $this->transactions()->create([
-                'wallet_id' => $this->id,
+                'wallet_id'        => $this->id,
                 'transaction_type' => 'transfer',
-                'amount' => $amount
+                'amount'           => $amount
             ]);
 
             $toUser->wallet->received($amount);
+
+            if($fee !=0 ){
+                $this->fee($fee,"transfer");
+            }
         }
     }
 
+    public function fee($amount,$transactionType){
 
+        $this->balance -= $amount;
+        $this->save();
+        $this->transactions()->create([
+            'wallet_id'        => $this->id,
+            'transaction_type' => 'fee_'.$transactionType,
+            'amount'           => $amount
+        ]);
+    }
 
     public function transactions()
     {

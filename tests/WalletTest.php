@@ -97,19 +97,22 @@ class LaraWalletTest extends TestCase
         try{
 
             $user = User::create($newUser);
+            $withdrawFee = config("larawallet.withdraw_fee",0);
 
-            $user->wallet->deposit(100);
-            $user->wallet->withdraw(100);
+
+
+            $user->wallet->deposit(10000);
+            $user->wallet->withdraw(10000);
             $this->assertEquals(0,$user->wallet->balance());
 
 
-            $user->wallet->deposit(100);
-            $user->wallet->withdraw(101);
-            $this->assertEquals(100,$user->wallet->balance());
+            $user->wallet->deposit(10000);
+            $user->wallet->withdraw(10001);
+            $this->assertEquals(10000,$user->wallet->balance());
 
 
-            $user->wallet->withdraw(50);
-            $this->assertEquals(50,$user->wallet->balance());
+            $user->wallet->withdraw(5000);
+            $this->assertEquals(5000,$user->wallet->balance());
 
         }finally{
             $clear();
@@ -165,6 +168,10 @@ class LaraWalletTest extends TestCase
             $this->assertEquals(1000, $user2->wallet->balance());
             $this->assertEquals(14000, $user1->wallet->balance());
 
+
+            $user2->wallet->transfer(100,$user1);
+            $this->assertEquals(900, $user2->wallet->balance());
+            $this->assertEquals(14100, $user1->wallet->balance());
 
 
         }finally{
