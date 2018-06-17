@@ -8,7 +8,10 @@
     ],
     "require": {},
     "autoload": {
-        "psr-4": {"nattaponra\\LaraWallet\\": "src/"}
+        "psr-4": {"nattaponra\\LaraWallet\\": "src/"},
+        "classmap":[
+            "src/database/migrations"
+        ]
     }
 
 }
