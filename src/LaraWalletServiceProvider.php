@@ -13,10 +13,10 @@ class LaraWalletServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         $this->loadMigrationsFrom(__DIR__.'/database/migrations');
-        $this->publishes([
-            __DIR__.'/config/config.php' => config_path('wallet.php'),
-        ]);
+
+        $this->publishes([__DIR__.'/config/config.php' => config_path('larawallet.php'),]);
     }
 
     /**
