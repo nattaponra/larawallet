@@ -9,7 +9,7 @@ class CreateWalletTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('larawallet.database.wallet.table',"lara_wallet_wallets"), function (Blueprint $table) {
+        Schema::create(config('larawallet.wallet_table',"lara_wallet_wallets"), function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id')->index();
             $table->double("balance");
@@ -22,6 +22,6 @@ class CreateWalletTable extends Migration
      */
     public function down()
     {
-        Schema::drop(config('larawallet.database.wallet.table',"lara_wallet_wallets"));
+        Schema::drop(config('larawallet.wallet_table',"lara_wallet_wallets"));
     }
 }
