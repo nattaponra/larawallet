@@ -1,26 +1,27 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nattaponra
- * Date: 16/6/2561
- * Time: 13:26 น.
- */
+
 
 namespace nattaponra\LaraWallet;
 
 
 trait HasWallet
 {
+    public function wallet()
+    {
 
-    public function balance(){
-        return 100;
+        $wallet = $this->hasOne(Wallet::class, "user_id", "id");
+        if ($wallet->count() == 0) {
+            $this->initWallet($wallet);
+            $wallet = $this->hasOne(Wallet::class , "user_id", "id");
+        }
+        return $wallet;
     }
 
-    public function deposit(){
-
-    }
-
-    public function withdraw(){
-
+    private function initWallet($wallet)
+    {
+        $wallet->create([
+            'user_id' => $this->id,
+            'balance' => config('larawallet.wallet_balance_init',0)
+        ]);
     }
 }
