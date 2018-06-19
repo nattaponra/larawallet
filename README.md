@@ -16,7 +16,7 @@ composer require nattaponra/larawallet
 Publish the migrations and config file with this artisan command:
 
 ```bash
-php artisan vendor:publish  
+php artisan vendor:publish --provider="nattaponra\LaraWallet\LaraWalletServiceProvider"
 ```
  
  
