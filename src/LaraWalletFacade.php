@@ -1,6 +1,7 @@
 <?php
 
 namespace nattaponra\LaraWallet;
+
 use Illuminate\Support\Facades\Facade;
 /**
  * @see \Nattaponra\LaraWallet\WalletFacade

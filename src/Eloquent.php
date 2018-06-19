@@ -1,8 +1,6 @@
 <?php
 
-
 namespace nattaponra\LaraWallet;
-
 
 use App\Transaction;
 

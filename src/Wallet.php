@@ -56,6 +56,7 @@ class Wallet extends Model implements WalletInterface
     public function withdraw($amount){
 
         if($this->isEnough($amount)){
+
             $fee = 0;
             $withdrawFee = config("larawallet.withdraw_fee",0);
 
@@ -77,7 +78,6 @@ class Wallet extends Model implements WalletInterface
             }
 
         }
-
 
     }
 
