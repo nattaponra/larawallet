@@ -4,7 +4,7 @@ namespace nattaponra\LaraWallet;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Wallet extends Model implements WalletInterface
+class SanBoxWallet extends Model implements WalletInterface
 {
     use Eloquent;
 
@@ -12,7 +12,7 @@ class Wallet extends Model implements WalletInterface
 
     public function __construct(array $attributes = [])
     {
-        $this->table = config("larawallet.wallet_table","lara_wallet_wallets");
+        $this->table = config("larawallet.sanbox_wallet_table","lara_wallet_sanbox_wallets");
         parent::__construct($attributes);
     }
 
@@ -118,6 +118,5 @@ class Wallet extends Model implements WalletInterface
             'amount'           => $amount
         ]);
     }
-
 
 }

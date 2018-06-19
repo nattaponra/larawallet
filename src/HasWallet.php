@@ -6,10 +6,14 @@ namespace nattaponra\LaraWallet;
 
 trait HasWallet
 {
-    /**
-     *
-     * @return Wallet
-     */
+    private function initWallet($wallet)
+    {
+        $wallet->create([
+            'user_id' => $this->id,
+            'balance' => config('larawallet.balance_init',0)
+        ]);
+    }
+
     public function wallet()
     {
 
@@ -21,11 +25,12 @@ trait HasWallet
         return $wallet;
     }
 
-    private function initWallet($wallet)
-    {
-        $wallet->create([
-            'user_id' => $this->id,
-            'balance' => config('larawallet.balance_init',0)
-        ]);
+    public function sanBoxWallet(){
+        $sanBoxWallet = $this->hasOne(SanBoxWallet::class, "user_id", "id");
+        if ($sanBoxWallet->count() == 0) {
+            $this->initWallet($sanBoxWallet);
+            $sanBoxWallet = $this->hasOne(SanBoxWallet::class , "user_id", "id");
+        }
+        return $sanBoxWallet;
     }
 }
