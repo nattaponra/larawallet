@@ -84,3 +84,5 @@ SanBox Mode
 ```bash
   $user->sanBoxWallet->balance();
 ```
+
+## Option
