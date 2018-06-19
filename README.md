@@ -25,14 +25,13 @@ php artisan migrate
 ```
 ## 3. Wallet using with user model.
 
- Add 'HasWallet' trait in User model:
+ Add 'HasWallet' trait in User model (app/User.php):
 
 ```bash
 class User extends Authenticatable
 {
 
     use HasWallet;
-    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
