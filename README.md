@@ -48,4 +48,39 @@ class User extends Authenticatable
 ```
  
 ## 4. Using
+
+Get example user 
+```bash
+$user = Auth::user();
+```
+Balance checking
+
+```bash
+echo $user->wallet->balance()
+```
+Deposition
+
+```bash
+$user->wallet->deposit(100);
+```
+Withdrawal
+```bash
+$user->wallet->withdraw(5000);
+```
+Transfer
+```bash
+
+ $user1 = User::find(1);
+ $user2 = User::find(2);
  
+ $user1->wallet->deposit(15000);
+ $user1->wallet->transfer(1000,$user2);
+
+ echo $user1->wallet->balance(); #14000
+ echo $user2->wallet->balance(); #1000
+
+```
+SanBox Mode 
+```bash
+  $user->sanBoxWallet->balance();
+```
