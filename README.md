@@ -49,7 +49,7 @@ class User extends Authenticatable
  
 ## 4. Using
 
-Get example user 
+Create example user 
 ```bash
 $user = Auth::user();
 ```
