@@ -18,5 +18,9 @@ Publish the migrations and config file with this artisan command:
 ```bash
 php artisan vendor:publish --provider="nattaponra\LaraWallet\LaraWalletServiceProvider"
 ```
- 
+Run migration file to create database tables:
+
+```bash
+php artisan migrate
+```
  
