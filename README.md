@@ -2,6 +2,13 @@
 # Lara Wallet
 
 Larawallet is a wallet system package that allow you fast develop wallet system in your project.
+## Features
+ - Balance checking
+ - Deposition
+ - Withdrawal
+ - Transfer
+ - fee 
+ - SanBox Mode
 
 ## 1. Installation
 
