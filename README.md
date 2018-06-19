@@ -1,7 +1,7 @@
 
 # Lara Wallet
 
-Larawallet is a wallet system package that allow you fast develop wallet system in your project.
+Lara wallet is a wallet system package that allow you fast develop wallet system in laravel framework.
 ## Features
  - Balance checking
  - Deposition
