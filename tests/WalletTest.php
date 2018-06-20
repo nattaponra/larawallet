@@ -180,4 +180,64 @@ class LaraWalletTest extends TestCase
 
 
     }
+
+    public function testSanBoxTransferWallet(){
+
+        $clear = function(){
+            User::where("email","testing1@feedika.com")->delete();
+            User::where("email","testing2@feedika.com")->delete();
+        };
+
+        $newUser1 = [
+            "name"                  => "user1",
+            "email"                 => "testing1@feedika.com",
+            "password"              => "1234",
+            "password_confirmation" => "1234",
+
+        ];
+
+        $newUser2 = [
+            "name"                  => "user2",
+            "email"                 => "testing2@feedika.com",
+            "password"              => "1234",
+            "password_confirmation" => "1234",
+
+        ];
+
+
+        try{
+
+
+            $user1 = User::create($newUser1);
+            $user2 = User::create($newUser2);
+
+            //Initial wallet
+            $this->assertEquals(0, $user1->sanBoxWallet->balance());
+            $this->assertEquals(0, $user2->sanBoxWallet->balance());
+
+            //Deposit 15000
+            $user1->sanBoxWallet->deposit(15000);
+            $user1->sanBoxWallet->transfer(1000,$user2);
+
+
+            $this->assertEquals(14000, $user1->sanBoxWallet->balance());
+            $this->assertEquals(1000, $user2->sanBoxWallet->balance());
+
+
+            $user2->sanBoxWallet->transfer(2000,$user1);
+            $this->assertEquals(1000, $user2->sanBoxWallet->balance());
+            $this->assertEquals(14000, $user1->sanBoxWallet->balance());
+
+
+            $user2->sanBoxWallet->transfer(100,$user1);
+            $this->assertEquals(900, $user2->sanBoxWallet->balance());
+            $this->assertEquals(14100, $user1->sanBoxWallet->balance());
+
+
+        }finally{
+            $clear();
+        }
+
+
+    }
 }
