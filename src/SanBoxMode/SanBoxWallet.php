@@ -168,5 +168,9 @@ class SanBoxWallet extends Model implements WalletInterface
         ]);
     }
 
-
+    public function clearTransaction($defaultBalance = 0){
+        $this->balance = $defaultBalance;
+        $this->save();
+        $this->sanBoxTransactions()->delete();
+    }
 }
