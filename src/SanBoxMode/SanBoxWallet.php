@@ -1,8 +1,10 @@
 <?php
 
-namespace nattaponra\LaraWallet;
+namespace nattaponra\LaraWallet\SanBoxMode;
 
 use Illuminate\Database\Eloquent\Model;
+use nattaponra\LaraWallet\Eloquent;
+use nattaponra\LaraWallet\WalletInterface;
 
 class SanBoxWallet extends Model implements WalletInterface
 {
@@ -32,7 +34,7 @@ class SanBoxWallet extends Model implements WalletInterface
         $this->balance += $amount;
         $this->save();
 
-        $this->transactions()->create([
+        $this->sanBoxTransactions()->create([
             'wallet_id'        => $this->id,
             'transaction_type' => 'deposit',
             'amount'           => $amount
@@ -46,7 +48,7 @@ class SanBoxWallet extends Model implements WalletInterface
         $this->balance += $amount;
         $this->save();
 
-        $this->transactions()->create([
+        $this->sanBoxTransactions()->create([
             'wallet_id'        => $this->id,
             'transaction_type' => 'received',
             'amount'           => $amount
@@ -94,7 +96,7 @@ class SanBoxWallet extends Model implements WalletInterface
             $this->balance -= $amount - $fee;
             $this->save();
 
-            $this->transactions()->create([
+            $this->sanBoxTransactions()->create([
                 'wallet_id'        => $this->id,
                 'transaction_type' => 'transfer',
                 'amount'           => $amount
@@ -112,7 +114,7 @@ class SanBoxWallet extends Model implements WalletInterface
 
         $this->balance -= $amount;
         $this->save();
-        $this->transactions()->create([
+        $this->sanBoxTransactions()->create([
             'wallet_id'        => $this->id,
             'transaction_type' => 'fee_'.$transactionType,
             'amount'           => $amount

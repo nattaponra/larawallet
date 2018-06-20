@@ -2,7 +2,9 @@
 
 namespace nattaponra\LaraWallet;
 
+use http\Exception;
 use Illuminate\Database\Eloquent\Model;
+use nattaponra\LaraWallet\Exception\LaraWalletException;
 
 class Wallet extends Model implements WalletInterface
 {
@@ -28,15 +30,20 @@ class Wallet extends Model implements WalletInterface
     }
 
     public function deposit($amount){
+      //  try{
 
-        $this->balance += $amount;
-        $this->save();
+            $this->balance += $amount;
+            $this->save();
 
-        $this->transactions()->create([
-            'wallet_id'        => $this->id,
-            'transaction_type' => 'deposit',
-            'amount'           => $amount
-        ]);
+            $this->transactions()->create([
+                'wallet_id'        => $this->id,
+                'transaction_type' => 'deposit',
+                'amount'           => $amount
+            ]);
+//        }catch (LaraWalletException $e){
+//            echo 'Caught exception: ',  $e->getMessage(), "\n";
+//        }
+
 
         return true;
     }
@@ -76,8 +83,9 @@ class Wallet extends Model implements WalletInterface
             if($fee !=0 ){
                 $this->fee($fee,"withdraw");
             }
-
+            return true;
         }
+        return false;
 
     }
 
@@ -105,7 +113,10 @@ class Wallet extends Model implements WalletInterface
             if($fee !=0 ){
                 $this->fee($fee,"transfer");
             }
+            return true;
         }
+
+        return false;
     }
 
     public function fee($amount,$transactionType){

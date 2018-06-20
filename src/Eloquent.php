@@ -2,7 +2,11 @@
 
 namespace nattaponra\LaraWallet;
 
-use App\Transaction;
+
+
+use App\User;
+use nattaponra\LaraWallet\SanBoxMode\SanBoxTransaction;
+
 
 trait Eloquent
 {
@@ -11,9 +15,13 @@ trait Eloquent
         return $this->hasMany( Transaction::class);
     }
 
+    public function sanBoxTransactions()
+    {
+        return $this->hasMany( SanBoxTransaction::class,"wallet_id","id");
+    }
 
     public function user()
     {
-        return $this->belongsTo(\App\User::class);
+        return $this->belongsTo(User::class);
     }
 }
