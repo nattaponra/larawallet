@@ -8,6 +8,7 @@ use App\User;
 use nattaponra\LaraWallet\SanBoxMode\SanBoxTransaction;
 
 
+
 trait Eloquent
 {
     public function transactions()

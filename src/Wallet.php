@@ -2,9 +2,12 @@
 
 namespace nattaponra\LaraWallet;
 
-use http\Exception;
+use App\User;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use nattaponra\LaraWallet\Exception\LaraWalletException;
+
 
 class Wallet extends Model implements WalletInterface
 {
@@ -21,7 +24,6 @@ class Wallet extends Model implements WalletInterface
     private function isEnough($amount){
 
         return $this->balance >= $amount;
-
     }
 
     public function balance(){
@@ -30,26 +32,33 @@ class Wallet extends Model implements WalletInterface
     }
 
     public function deposit($amount){
-      //  try{
+
+        DB::beginTransaction();
+
+        try{
 
             $this->balance += $amount;
             $this->save();
 
             $this->transactions()->create([
-                'wallet_id'        => $this->id,
                 'transaction_type' => 'deposit',
                 'amount'           => $amount
             ]);
-//        }catch (LaraWalletException $e){
-//            echo 'Caught exception: ',  $e->getMessage(), "\n";
-//        }
 
+            DB::commit();
+            return true;
 
-        return true;
+        }catch (LaraWalletException $e){
+
+            DB::rollback();
+            return false;
+
+        }
+
     }
 
-    public function received($amount){
-        
+    private function received($amount){
+
         $this->balance += $amount;
         $this->save();
 
@@ -64,26 +73,37 @@ class Wallet extends Model implements WalletInterface
 
         if($this->isEnough($amount)){
 
-            $fee = 0;
-            $withdrawFee = config("larawallet.withdraw_fee",0);
+            DB::beginTransaction();
 
-            if($withdrawFee != 0){
-                $fee = $amount * ($withdrawFee/100);
+            try{
+
+                $fee = 0;
+                $withdrawFee = config("larawallet.withdraw_fee",0);
+
+                if($withdrawFee != 0){
+                    $fee = $amount * ($withdrawFee/100);
+                }
+
+                $this->balance -= $amount - $fee;
+                $this->save();
+
+                $this->transactions()->create([
+                    'transaction_type' => 'withdraw',
+                    'amount'           => $amount
+                ]);
+
+                if($fee !=0 ){
+                    $this->fee($fee,'withdraw');
+                }
+
+                DB::commit();
+                return true;
+
+
+            }catch (LaraWalletException $e){
+                DB::rollback();
             }
 
-            $this->balance -= $amount - $fee;
-            $this->save();
-
-            $this->transactions()->create([
-                'wallet_id'        => $this->id,
-                'transaction_type' => 'withdraw',
-                'amount'           => $amount
-            ]);
-
-            if($fee !=0 ){
-                $this->fee($fee,"withdraw");
-            }
-            return true;
         }
         return false;
 
@@ -92,28 +112,43 @@ class Wallet extends Model implements WalletInterface
     public function transfer($amount , $toUser){
 
         if($this->isEnough($amount)) {
-            $fee = 0;
-            $transferFee = config("larawallet.transfer_fee",0);
 
-            if($transferFee != 0){
-                $fee = $amount * ($transferFee/100);
+            DB::beginTransaction();
+
+            try{
+
+                if(!$toUser instanceof User){
+                   throw new Exception("Transferee not found.");
+                }
+
+                $fee = 0;
+                $transferFee = config("larawallet.transfer_fee",0);
+
+                if($transferFee != 0){
+                    $fee = $amount * ($transferFee/100);
+                }
+
+                $this->balance -= $amount - $fee;
+                $this->save();
+
+                $this->transactions()->create([
+                    'transaction_type' => 'transfer',
+                    'amount'           => $amount
+                ]);
+
+                $toUser->wallet->received($amount);
+
+                if($fee !=0 ){
+                    $this->fee($fee,'transfer');
+                }
+
+                DB::commit();
+                return true;
+
+            }catch (LaraWalletException $e){
+                DB::rollback();
             }
 
-            $this->balance -= $amount - $fee;
-            $this->save();
-
-            $this->transactions()->create([
-                'wallet_id'        => $this->id,
-                'transaction_type' => 'transfer',
-                'amount'           => $amount
-            ]);
-
-            $toUser->wallet->received($amount);
-
-            if($fee !=0 ){
-                $this->fee($fee,"transfer");
-            }
-            return true;
         }
 
         return false;
@@ -124,7 +159,6 @@ class Wallet extends Model implements WalletInterface
         $this->balance -= $amount;
         $this->save();
         $this->transactions()->create([
-            'wallet_id'        => $this->id,
             'transaction_type' => 'fee_'.$transactionType,
             'amount'           => $amount
         ]);
