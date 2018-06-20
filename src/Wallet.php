@@ -21,16 +21,33 @@ class Wallet extends Model implements WalletInterface
         parent::__construct($attributes);
     }
 
+    /**
+     * Validate enough amount in wallet.
+     *
+     * @param  double  $amount
+     * @return boolean
+     */
     private function isEnough($amount){
 
         return $this->balance >= $amount;
     }
 
+    /**
+     * get wallet balance.
+     *
+     * @return double
+     */
     public function balance(){
 
         return $this->balance;
     }
 
+    /**
+     * build deposit transaction.
+     *
+     * @param  double  $amount
+     * @return boolean
+     */
     public function deposit($amount){
 
         DB::beginTransaction();
@@ -57,7 +74,13 @@ class Wallet extends Model implements WalletInterface
 
     }
 
-    private function received($amount){
+    /**
+     * build received transaction for transfer.
+     *
+     * @param  double  $amount
+     * @return boolean
+     */
+    public function received($amount){
 
         $this->balance += $amount;
         $this->save();
@@ -69,6 +92,12 @@ class Wallet extends Model implements WalletInterface
         ]);
     }
 
+    /**
+     * build withdraw transaction.
+     *
+     * @param  double  $amount
+     * @return boolean
+     */
     public function withdraw($amount){
 
         if($this->isEnough($amount)){
@@ -109,6 +138,14 @@ class Wallet extends Model implements WalletInterface
 
     }
 
+    /**
+     * build transfer transaction.
+     *
+     * @param  double $amount
+     * @param  \App\User $toUser
+     * @return boolean
+     * @throws Exception
+     */
     public function transfer($amount , $toUser){
 
         if($this->isEnough($amount)) {
@@ -154,6 +191,12 @@ class Wallet extends Model implements WalletInterface
         return false;
     }
 
+    /**
+     * fee function.
+     *
+     * @param  double $amount
+     * @param  string $transactionType
+     */
     public function fee($amount,$transactionType){
 
         $this->balance -= $amount;
