@@ -173,7 +173,7 @@ class LaraWalletTest extends TestCase
             $this->assertEquals(900, $user2->wallet->balance());
             $this->assertEquals(14100, $user1->wallet->balance());
 
-            echo "test";
+
         }finally{
             $clear();
         }
