@@ -33,18 +33,17 @@ php artisan migrate
 ## 3. Wallet using with user model.
 
  Add 'HasWallet' trait in User model (app/User.php):
+ And Add 'HasSanBoxWallet' trait for sanbox mode.
 
 ```bash
 class User extends Authenticatable
 {
 
     use HasWallet;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    use HasSanBoxWallet;
+    
+    ......
+}
 ```
  
 ## 4. Using
