@@ -8,7 +8,7 @@
         }
     ],
  
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
     "require": {},
     "require-dev": {
         "mockery/mockery": "0.9.*",
